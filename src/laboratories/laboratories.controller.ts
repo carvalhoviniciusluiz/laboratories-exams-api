@@ -3,7 +3,6 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { LaboratoryRequest } from './dtos/laboratory-request.dto';
 import { LaboratoryResponse } from './dtos/laboratory-response.dto';
 import { LaboratoriesService } from './laboratories.service';
-import { LaboratoryEntity } from './laboratory.entity';
 
 @ApiTags('LABORATORIES')
 @Controller('laboratories')
@@ -27,14 +26,14 @@ export class LaboratoriesController {
   @ApiOkResponse({ type: [LaboratoryResponse] })
   @Post()
   async create(@Body(ValidationPipe) laboratory: LaboratoryRequest) {
-    const one = await this.service.create(laboratory as LaboratoryEntity);
+    const one = await this.service.create(laboratory);
     return LaboratoryResponse.factory(one);
   }
 
   @ApiOkResponse({ type: [LaboratoryResponse] })
   @Patch('/:id')
   async patch(@Param('id', ValidationPipe) id: string, @Body(ValidationPipe) laboratory: LaboratoryRequest) {
-    const found = await this.service.update(id, laboratory as LaboratoryEntity);
+    const found = await this.service.update(id, laboratory);
     return LaboratoryResponse.factory(found);
   }
 

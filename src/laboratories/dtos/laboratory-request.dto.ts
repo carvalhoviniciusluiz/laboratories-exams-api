@@ -22,11 +22,11 @@ export class LaboratoryRequest {
   address: string;
 
   @ApiProperty({
-    type: String,
+    type: Number,
     description: 'The status of the laboratory',
     required: true
   })
   @IsOptional()
   @Expose({ name: 'status' })
-  status?: string;
+  status?: number;
 }

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { classToClass, Expose, plainToClass } from 'class-transformer';
-import { LaboratoryEntity } from 'laboratories/laboratory.entity';
+import { LaboratoryEntity } from '../laboratory.entity';
 
 export class LaboratoryResponse {
   @ApiProperty({
