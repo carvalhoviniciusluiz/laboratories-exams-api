@@ -23,9 +23,10 @@ export class ExamEntity extends BaseEntity {
   name: string;
 
   @Column({
-    type: 'int',
+    type: 'varchar',
+    length: 17,
     nullable: false,
-    default: 1
+    default: 'clinical-analysis'
   })
   type: string;
 

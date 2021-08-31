@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExamEntity } from './exam.entity';
 import { ExamNotFoundException } from './exam-not-found.exception';
+import { TypeEnum } from './dtos';
 
 type ExamProps = {
   name: string;
-  type: number;
+  type: TypeEnum;
   status?: number;
 };
 
@@ -52,7 +53,6 @@ export class ExamsService {
   async create(exam: ExamProps): Promise<ExamEntity> {
     return this.repository.save({
       ...exam,
-      type: exam.type.toString() || '1',
       status: exam.status?.toString() || '0'
     });
   }
@@ -61,7 +61,7 @@ export class ExamsService {
     const found = await this.findById(id);
 
     found.name = exam.name;
-    found.type = exam.type.toString() || '1';
+    found.type = exam.type;
     found.status = exam.status?.toString() || '0';
 
     await found.save();

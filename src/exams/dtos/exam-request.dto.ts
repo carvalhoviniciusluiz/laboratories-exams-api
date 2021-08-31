@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { Expose } from 'class-transformer';
+
+export enum TypeEnum {
+  CLINICAL_ANALYSIS = 'clinical-analysis',
+  IMAGE = 'image'
+}
 
 export class ExamRequest {
   @ApiProperty({
@@ -19,7 +24,8 @@ export class ExamRequest {
   })
   @IsNotEmpty()
   @Expose({ name: 'type' })
-  type: number;
+  @IsEnum(TypeEnum)
+  type: TypeEnum;
 
   @ApiProperty({
     type: Number,
