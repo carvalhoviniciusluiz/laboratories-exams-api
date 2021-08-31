@@ -16,14 +16,13 @@ export const APP_HOST = configService.get<string>('APP_HOST') || '0.0.0.0';
 
 export const IS_PROD = NODE_ENV === 'production';
 export const IS_TEST = NODE_ENV === 'test';
+export const IS_DEV = !IS_TEST && !IS_PROD;
 
 export const POSTGRES_DB = configService.get<string>('POSTGRES_DB');
-export const POSTGRES_HOST = IS_TEST
-  ? '0.0.0.0'
-  : configService.get<string>('POSTGRES_HOST');
+export const POSTGRES_HOST = IS_TEST ? '0.0.0.0' : configService.get<string>('POSTGRES_HOST');
 export const POSTGRES_USER = configService.get<string>('POSTGRES_USER');
 export const POSTGRES_PASSWORD = configService.get<string>('POSTGRES_PASSWORD');
 
-if (!IS_TEST && !IS_PROD) {
+if (IS_DEV) {
   console.table(ENV_FILE);
 }

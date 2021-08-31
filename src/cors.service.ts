@@ -5,6 +5,6 @@ export const enableCors = (app: INestApplication) => {
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     preflightContinue: false,
-    optionsSuccessStatus: 200,
+    optionsSuccessStatus: 200
   });
 };

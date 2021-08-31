@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as ENV from './app.constants';
+import * as ENV from './constants';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -8,10 +8,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: ENV.POSTGRES_PASSWORD,
   database: ENV.POSTGRES_DB,
   entities: [`${__dirname}/**/*.entity.{js,ts}`],
-  migrations: [`${__dirname}/migrations/*.{js,ts}`],
-  synchronize: true,
-  logging: false,
-  cli: {
-    migrationsDir: `${__dirname}/migrations`,
-  },
+  synchronize: ENV.IS_DEV,
+  logging: ENV.IS_DEV
 };
