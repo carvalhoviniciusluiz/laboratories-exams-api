@@ -25,6 +25,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "update:packages": "yarn ncu -u"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "concurrently -r \"yarn format\" \"yarn lint\" \"yarn test:staged\" \"yarn tsc --noEmit\"",
+      "post-merge": "yarn",
+      "pre-push": "yarn test:cov"
+    }
+  },
   "dependencies": {
     "@nestjs/common": "^8.0.6",
     "@nestjs/core": "^8.0.6",
@@ -44,9 +51,11 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
+    "concurrently": "^6.2.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
     "jest": "^27.1.0",
     "jest-extended": "^0.11.5",
     "npm-check-updates": "^11.8.3",
@@ -70,7 +79,9 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "setupFilesAfterEnv": ["jest-extended"],
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
     "maxConcurrency": 1,
     "collectCoverageFrom": [
       "**/*.(t|j)s"
