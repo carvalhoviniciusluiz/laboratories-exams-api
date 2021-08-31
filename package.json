@@ -8,7 +8,9 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "build:tsc": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
     "dev": "NODE_ENV=development ts-node-dev --inspect=0.0.0.0:7001 --ignore-watch node_modules -r tsconfig-paths/register --respawn --transpile-only ./src/main.ts",
     "start": "nest start",
     "start:dev": "nest start --watch",
