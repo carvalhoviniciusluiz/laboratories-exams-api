@@ -1,4 +1,9 @@
+import * as dotenv from 'dotenv';
 import { ConfigService } from '@nestjs/config';
+
+const result = dotenv.config();
+
+const ENV_FILE = result.parsed || {};
 
 const configService = new ConfigService();
 
@@ -13,7 +18,12 @@ export const IS_PROD = NODE_ENV === 'production';
 export const IS_TEST = NODE_ENV === 'test';
 
 export const POSTGRES_DB = configService.get<string>('POSTGRES_DB');
-export const POSTGRES_HOST = configService.get<string>('POSTGRES_HOST');
-export const POSTGRES_PORT = configService.get<number>('POSTGRES_PORT');
+export const POSTGRES_HOST = IS_TEST
+  ? '0.0.0.0'
+  : configService.get<string>('POSTGRES_HOST');
 export const POSTGRES_USER = configService.get<string>('POSTGRES_USER');
 export const POSTGRES_PASSWORD = configService.get<string>('POSTGRES_PASSWORD');
+
+if (!IS_TEST && !IS_PROD) {
+  console.table(ENV_FILE);
+}
