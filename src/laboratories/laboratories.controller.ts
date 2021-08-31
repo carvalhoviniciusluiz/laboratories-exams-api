@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, ValidationPipe } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { LaboratoryRequest } from './dtos/laboratory-request.dto';
-import { LaboratoryResponse } from './dtos/laboratory-response.dto';
+import { LaboratoryRequest, LaboratoryResponse, LaboratoryQuery } from './dtos';
 import { LaboratoriesService } from './laboratories.service';
 
 @ApiTags('LABORATORIES')
@@ -11,8 +10,11 @@ export class LaboratoriesController {
 
   @ApiOkResponse({ type: [LaboratoryResponse] })
   @Get()
-  async getAll() {
-    const all = await this.service.findAll();
+  async getAll(@Query(ValidationPipe) queryString: LaboratoryQuery) {
+    const hasName = !!queryString.name;
+    const all = !hasName
+      ? await this.service.findAll(queryString.status)
+      : await this.service.findByName(queryString.name, queryString.status);
     return LaboratoryResponse.factory(all);
   }
 

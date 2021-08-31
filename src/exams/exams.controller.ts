@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, ValidationPipe } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { ExamRequest } from './dtos/exam-request.dto';
-import { ExamResponse } from './dtos/exam-response.dto';
+import { ExamRequest, ExamResponse, ExamQuery } from './dtos';
 import { ExamsService } from './exams.service';
 
 @ApiTags('EXAMS')
@@ -11,8 +10,11 @@ export class ExamsController {
 
   @ApiOkResponse({ type: [ExamResponse] })
   @Get()
-  async getAll() {
-    const all = await this.service.findAll();
+  async getAll(@Query(ValidationPipe) queryString: ExamQuery) {
+    const hasName = !!queryString.name;
+    const all = !hasName
+      ? await this.service.findAll(queryString.status)
+      : await this.service.findByName(queryString.name, queryString.status);
     return ExamResponse.factory(all);
   }
 

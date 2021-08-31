@@ -17,10 +17,12 @@ export class ExamsService {
     private repository: Repository<ExamEntity>
   ) {}
 
-  findAll(): Promise<ExamEntity[]> {
+  findAll(status: number): Promise<ExamEntity[]> {
+    const statusVal = !!status ? status : 1;
+
     return this.repository.find({
       where: {
-        status: 1
+        status: statusVal
       }
     });
   }
@@ -35,22 +37,20 @@ export class ExamsService {
     return found;
   }
 
-  async findByName(name: string): Promise<ExamEntity> {
-    const found = await this.repository.findOne({
-      where: {
-        name: name
-      }
-    });
+  async findByName(name: string, status: number): Promise<ExamEntity[]> {
+    const statusVal = !!status ? status : 1;
 
-    if (!found) {
-      throw ExamNotFoundException.withName(name);
-    }
-
-    return found;
+    return this.repository
+      .createQueryBuilder('exams')
+      .where(`name ILIKE :name`, {
+        name: `%${name}%`
+      })
+      .andWhere({ status: statusVal })
+      .getMany();
   }
 
   async create(exam: ExamProps): Promise<ExamEntity> {
-    return await this.repository.save({
+    return this.repository.save({
       ...exam,
       type: exam.type.toString() || '1',
       status: exam.status?.toString() || '0'

@@ -17,10 +17,12 @@ export class LaboratoriesService {
     private repository: Repository<LaboratoryEntity>
   ) {}
 
-  findAll(): Promise<LaboratoryEntity[]> {
+  findAll(status: number): Promise<LaboratoryEntity[]> {
+    const statusVal = !!status ? status : 1;
+
     return this.repository.find({
       where: {
-        status: 1
+        status: statusVal
       }
     });
   }
@@ -35,22 +37,20 @@ export class LaboratoriesService {
     return found;
   }
 
-  async findByName(name: string): Promise<LaboratoryEntity> {
-    const found = await this.repository.findOne({
-      where: {
-        name: name
-      }
-    });
+  async findByName(name: string, status: number): Promise<LaboratoryEntity[]> {
+    const statusVal = !!status ? status : 1;
 
-    if (!found) {
-      throw LaboratoryNotFoundException.withName(name);
-    }
-
-    return found;
+    return this.repository
+      .createQueryBuilder('laboratories')
+      .where(`name ILIKE :name`, {
+        name: `%${name}%`
+      })
+      .andWhere({ status: statusVal })
+      .getMany();
   }
 
   async create(laboratory: LaboratoryProps): Promise<LaboratoryEntity> {
-    return await this.repository.save({
+    return this.repository.save({
       ...laboratory,
       status: laboratory?.status?.toString() || '0'
     });
