@@ -1,8 +1,8 @@
 {
   "name": "laboratories-exams-api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "This is our Laboratories-Exams API",
+  "author": "Carvalho, Vinicius Luiz <carvalho.viniciusluiz@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
