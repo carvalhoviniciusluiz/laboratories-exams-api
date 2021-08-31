@@ -18,7 +18,11 @@ export class ExamsService {
   ) {}
 
   findAll(): Promise<ExamEntity[]> {
-    return this.repository.find();
+    return this.repository.find({
+      where: {
+        status: 1
+      }
+    });
   }
 
   async findById(id: string): Promise<ExamEntity> {
