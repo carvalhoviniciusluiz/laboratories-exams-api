@@ -1,3 +1,4 @@
+import { ExamEntity } from 'exams/exam.entity';
 import {
   Column,
   Entity,
@@ -6,7 +7,8 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   DeleteDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToMany
 } from 'typeorm';
 
 @Entity('laboratories')
@@ -18,6 +20,11 @@ export class LaboratoryEntity extends BaseEntity {
   @Column({ name: 'alternativeid', select: false })
   @Generated('increment')
   alternativeId: number;
+
+  @ManyToMany(() => ExamEntity, exam => exam.laboratories, {
+    cascade: true
+  })
+  exams: ExamEntity[];
 
   @Column({ type: 'varchar', length: 250, nullable: false })
   name: string;

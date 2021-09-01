@@ -1,3 +1,4 @@
+import { LaboratoryEntity } from 'laboratories/laboratory.entity';
 import {
   Column,
   Entity,
@@ -6,7 +7,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   DeleteDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
 
 @Entity('exams')
@@ -18,6 +21,22 @@ export class ExamEntity extends BaseEntity {
   @Column({ name: 'alternativeid', select: false })
   @Generated('increment')
   alternativeId?: number;
+
+  @ManyToMany(() => LaboratoryEntity, {
+    eager: true
+  })
+  @JoinTable({
+    name: 'laboratory_exams',
+    joinColumn: {
+      name: 'laboratory_id',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'exam_id',
+      referencedColumnName: 'id'
+    }
+  })
+  laboratories: LaboratoryEntity[];
 
   @Column({ type: 'varchar', length: 250, nullable: false })
   name: string;
