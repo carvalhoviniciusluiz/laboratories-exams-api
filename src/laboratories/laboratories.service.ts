@@ -37,6 +37,21 @@ export class LaboratoriesService {
     return found;
   }
 
+  async findByIdOnlyActive(id: string): Promise<LaboratoryEntity> {
+    const found = await this.repository.findOne({
+      where: {
+        id,
+        status: 1
+      }
+    });
+
+    if (!found) {
+      throw LaboratoryNotFoundException.isInactive(id);
+    }
+
+    return found;
+  }
+
   async findByName(name: string, status: number): Promise<LaboratoryEntity[]> {
     const statusVal = !!status ? status : 1;
 

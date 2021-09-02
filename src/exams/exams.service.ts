@@ -38,6 +38,30 @@ export class ExamsService {
     return found;
   }
 
+  async findByIdOnlyActive(id: string): Promise<ExamEntity> {
+    const found = await this.repository.findOne({
+      where: {
+        id,
+        status: 1
+      }
+    });
+
+    if (!found) {
+      throw ExamNotFoundException.isInactive(id);
+    }
+
+    return found;
+  }
+
+  // async findAllByIdOnlyActive(ids: string): Promise<ExamEntity[]> {
+  //   return this.repository
+  //     .createQueryBuilder()
+  //     .where('id IN (:...ids) AND status = 1', {
+  //       ids
+  //     })
+  //     .getMany();
+  // }
+
   async findByName(name: string, status: number): Promise<ExamEntity[]> {
     const statusVal = !!status ? status : 1;
 
