@@ -59,7 +59,7 @@ const checkSituation = (value: LaboratoryEntity | LaboratoryEntity[]) => {
     return {
       ...val,
       status: !!val.status ? 'ATIVO' : 'INATIVO',
-      exams: val.exams.map(exam => ({
+      exams: val.exams?.map(exam => ({
         id: exam.id,
         name: exam.name,
         type: exam.type,
@@ -70,7 +70,7 @@ const checkSituation = (value: LaboratoryEntity | LaboratoryEntity[]) => {
 
   const response = hasId
     ? humanizesValue(value as LaboratoryEntity)
-    : (value as LaboratoryEntity[]).map(val => humanizesValue(val));
+    : (value as LaboratoryEntity[])?.map(val => humanizesValue(val));
 
   return response;
 };
