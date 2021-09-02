@@ -261,7 +261,7 @@ API para atualizar laboratórios existentes
 Shell
 
 ```shell
-> PATCH /laboratories
+> PATCH /laboratories/9eb9570a-7186-4301-8063-c90e40c589cc
 ```
 
 Corpo
@@ -316,23 +316,168 @@ Resposta
 
 #### `#GET /exams` :
 
+API que devolve uma coleção de exames
+
 Parâmetros
+
+| Param | Type | Value
+|---------|--------------|----
+| name | string | Texto para consultar
+| status | number | 0 ou 1
+
+Shell
+
+```shell
+> GET /exams?name=sangue&status=1
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": [
+      {
+        "id": "e68c1898-9b07-4435-b103-6cfb43401619",
+        "name": "Exames de sangue",
+        "type": "clinical-analysis",
+        "status": "ATIVO",
+        "laboratories": []
+      }
+    ]
+  }
+}
+```
 
 #### `#GET /exams/:id` :
 
-Parâmetros
+API que devolve um objeto específico
+
+Shell
+
+```shell
+> GET /exams/e68c1898-9b07-4435-b103-6cfb43401619
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": {
+      "id": "e68c1898-9b07-4435-b103-6cfb43401619",
+      "name": "Exames de sangue",
+      "type": "clinical-analysis",
+      "status": "ATIVO",
+      "laboratories": []
+    }
+  }
+}
+```
 
 #### `#POST /exams` :
 
-Parâmetros
+API para cadastrar novos exames
+
+Shell
+
+```shell
+> POST /exams
+```
+
+Corpo
+
+```js
+{
+  "name": "Exames de sangue",
+  "type": "clinical-analysis",
+  "status": 1
+}
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": {
+      "name": "Exames de sangue",
+      "type": "clinical-analysis",
+      "status": 1,
+      "updatedAt": "2021-09-02T23:14:16.859Z",
+      "deletedAt": null,
+      "id": "e68c1898-9b07-4435-b103-6cfb43401619",
+      "alternativeId": 1,
+      "createdAt": "2021-09-02T23:14:16.859Z"
+    }
+  }
+}
+```
 
 #### `#PATCH /exams/:id` :
 
-Parâmetros
+API para atualizar exames existentes
+
+Shell
+
+```shell
+> PATCH /exames/e68c1898-9b07-4435-b103-6cfb43401619
+```
+
+Corpo
+
+```js
+{
+  "name": "Exames de cancer",
+  "type": "clinical-analysis",
+  "status": 1
+}
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": {
+      "id": "e68c1898-9b07-4435-b103-6cfb43401619",
+      "name": "Exames de cancer",
+      "type": "clinical-analysis",
+      "status": "ATIVO",
+      "laboratories": []
+    }
+  }
+}
+```
 
 #### `#DELETE /exams/:id` :
 
-Parâmetros
+API para remover exames
+
+Shell
+
+```shell
+> DELETE /exams
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success"
+  }
+}
+```
 
 ## Associação em Lote
 
