@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { getManager } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExamEntity } from './exam.entity';
@@ -18,24 +19,74 @@ export class ExamsService {
     private repository: Repository<ExamEntity>
   ) {}
 
-  findAll(status: number): Promise<ExamEntity[]> {
-    const statusVal = !!status ? status : 1;
+  reduce(values: any[] = []) {
+    return values.reduce((acc, cur) => {
+      let exam = acc.find((item: any) => item?.id === cur.examid);
 
-    return this.repository.find({
-      where: {
-        status: statusVal
+      if (!exam) {
+        exam = {
+          id: cur.examid,
+          name: cur.examname,
+          type: cur.examtype,
+          status: !!cur.examstatus ? 'ATIVO' : 'INATIVO',
+          laboratories: []
+        };
+        acc.push(exam);
       }
-    });
+
+      if (cur.laboratoryid) {
+        exam.laboratories.push({
+          id: cur.laboratoryid,
+          name: cur.laboratoryname,
+          address: cur.laboratoryaddress,
+          status: !!cur.laboratorystatus ? 'ATIVO' : 'INATIVO'
+        });
+      }
+
+      return acc;
+    }, []);
+  }
+
+  async findAll(status: number): Promise<ExamEntity[]> {
+    const entityManager = getManager();
+    const rawData = await entityManager.query(
+      `
+        SELECT exams.id as examId, exams.name as examName, exams.type as examType,
+          exams.status as examStatus, laboratories.id as laboratoryId,
+          laboratories.name as laboratoryName, laboratories.address as laboratoryAddress,
+          laboratories.status as laboratoryStatus
+        FROM exams
+          LEFT JOIN laboratory_exams on laboratory_exams.exam_id = exams.id
+          LEFT JOIN laboratories on laboratories.id = laboratory_exams.laboratory_id
+        WHERE exams.status = $1;
+      `,
+      [status]
+    );
+
+    return this.reduce(rawData);
   }
 
   async findById(id: string): Promise<ExamEntity> {
-    const found = await this.repository.findOne(id);
+    const entityManager = getManager();
+    const rawData = await entityManager.query(
+      `
+        SELECT exams.id as examId, exams.name as examName, exams.type as examType,
+          exams.status as examStatus, laboratories.id as laboratoryId,
+          laboratories.name as laboratoryName, laboratories.address as laboratoryAddress,
+          laboratories.status as laboratoryStatus
+        FROM exams
+          LEFT JOIN laboratory_exams on laboratory_exams.exam_id = exams.id
+          LEFT JOIN laboratories on laboratories.id = laboratory_exams.laboratory_id
+        WHERE exams.id = $1;
+      `,
+      [id]
+    );
 
-    if (!found) {
+    if (!rawData) {
       throw ExamNotFoundException.withId(id);
     }
 
-    return found;
+    return this.reduce(rawData);
   }
 
   async findByIdOnlyActive(id: string): Promise<ExamEntity> {

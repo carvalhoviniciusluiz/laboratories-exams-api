@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { classToClass, Expose, plainToClass } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsEnum } from 'class-validator';
+import { LaboratoryEntity } from 'laboratories/laboratory.entity';
 import { ExamEntity } from '../exam.entity';
 import { TypeEnum } from './exam-request.dto';
 
@@ -38,42 +39,15 @@ export class ExamResponse {
   @Expose({ name: 'status' })
   status: string;
 
-  public static factory(target: ExamEntity | ExamEntity[]): ExamResponse | ExamResponse[] {
-    const response = plainToClass(ExamResponse, analyzeValues(target), {
-      ignoreDecorators: true
-    });
+  @ApiProperty({
+    type: String,
+    description: 'The status of the exam',
+    required: true
+  })
+  @Expose({ name: 'status' })
+  laboratories: LaboratoryEntity[];
 
-    return classToClass(response, { excludeExtraneousValues: true });
+  public static factory(target: ExamEntity | ExamEntity[]) {
+    return target;
   }
 }
-
-const analyzeValues = (value: ExamEntity | ExamEntity[]) => {
-  const hasId = Object.keys(value)?.includes('id');
-
-  const humanizesValue = (val: ExamEntity) => {
-    let clinicalType = null;
-
-    switch (val.type) {
-      case TypeEnum.CLINICAL_ANALYSIS:
-        clinicalType = 'ANALISE CLINICA';
-        break;
-      case TypeEnum.IMAGE:
-        clinicalType = 'IMAGEM';
-        break;
-      default:
-        console.log(`Sorry, unknown type to ${val.type}.`);
-    }
-
-    return {
-      ...val,
-      type: clinicalType,
-      status: !!val.status ? 'ATIVO' : 'INATIVO'
-    };
-  };
-
-  const response = hasId
-    ? humanizesValue(value as ExamEntity)
-    : (value as ExamEntity[]).map(val => humanizesValue(val));
-
-  return response;
-};

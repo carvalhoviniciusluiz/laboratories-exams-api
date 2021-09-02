@@ -8,8 +8,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable
+  ManyToMany
 } from 'typeorm';
 
 @Entity('exams')

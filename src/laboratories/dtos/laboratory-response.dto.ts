@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { classToClass, Expose, plainToClass } from 'class-transformer';
+import { ExamEntity } from 'exams/exam.entity';
 import { LaboratoryEntity } from '../laboratory.entity';
 
 export class LaboratoryResponse {
@@ -35,7 +36,14 @@ export class LaboratoryResponse {
   @Expose({ name: 'status' })
   status: string;
 
-  public static factory(target: LaboratoryEntity | LaboratoryEntity[]): LaboratoryResponse | LaboratoryResponse[] {
+  @ApiProperty({
+    type: String,
+    description: 'The exams of the laboratory'
+  })
+  @Expose({ name: 'exams' })
+  exams: ExamEntity;
+
+  public static factory(target: LaboratoryEntity | LaboratoryEntity[]) {
     const response = plainToClass(LaboratoryResponse, checkSituation(target), {
       ignoreDecorators: true
     });
@@ -50,7 +58,13 @@ const checkSituation = (value: LaboratoryEntity | LaboratoryEntity[]) => {
   const humanizesValue = (val: LaboratoryEntity) => {
     return {
       ...val,
-      status: !!val.status ? 'ATIVO' : 'INATIVO'
+      status: !!val.status ? 'ATIVO' : 'INATIVO',
+      exams: val.exams.map(exam => ({
+        id: exam.id,
+        name: exam.name,
+        type: exam.type,
+        status: !!exam.status ? 'ATIVO' : 'INATIVO'
+      }))
     };
   };
 
