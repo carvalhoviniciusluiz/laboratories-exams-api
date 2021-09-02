@@ -22,20 +22,7 @@ export class ExamEntity extends BaseEntity {
   @Generated('increment')
   alternativeId?: number;
 
-  @ManyToMany(() => LaboratoryEntity, {
-    eager: true
-  })
-  @JoinTable({
-    name: 'laboratory_exams',
-    joinColumn: {
-      name: 'laboratory_id',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'exam_id',
-      referencedColumnName: 'id'
-    }
-  })
+  @ManyToMany(() => LaboratoryEntity, laboratory => laboratory.exams)
   laboratories: LaboratoryEntity[];
 
   @Column({ type: 'varchar', length: 250, nullable: false })

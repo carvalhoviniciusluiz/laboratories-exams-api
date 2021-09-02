@@ -8,7 +8,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
-  ManyToMany
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
 
 @Entity('laboratories')
@@ -21,8 +22,17 @@ export class LaboratoryEntity extends BaseEntity {
   @Generated('increment')
   alternativeId: number;
 
-  @ManyToMany(() => ExamEntity, exam => exam.laboratories, {
-    cascade: true
+  @ManyToMany(() => ExamEntity, { eager: true })
+  @JoinTable({
+    name: 'laboratory_exams',
+    joinColumn: {
+      name: 'laboratory_id',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'exam_id',
+      referencedColumnName: 'id'
+    }
   })
   exams: ExamEntity[];
 
