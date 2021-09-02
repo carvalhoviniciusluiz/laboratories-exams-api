@@ -62,8 +62,9 @@ export class LaboratoriesService {
     const statusVal = !!status ? status : 1;
 
     return this.repository
-      .createQueryBuilder('laboratories')
-      .where(`name ILIKE :name`, {
+      .createQueryBuilder('laboratory')
+      .leftJoinAndSelect('laboratory.exams', 'exam')
+      .where(`laboratory.name ILIKE :name`, {
         name: `%${name}%`
       })
       .andWhere({ status: statusVal })
