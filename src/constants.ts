@@ -12,7 +12,6 @@ export const VERSION = configService.get<string>('VERSION') || '1';
 
 export const NODE_ENV = configService.get<string>('NODE_ENV');
 export const APP_PORT = configService.get<number>('APP_PORT');
-export const APP_HOST = configService.get<string>('APP_HOST');
 
 export const IS_PROD = NODE_ENV === 'production';
 export const IS_TEST = NODE_ENV === 'test';
