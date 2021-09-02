@@ -32,8 +32,8 @@ class Main {
     enableSwagger(app);
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
     await app
-      .listen(ENV.APP_PORT, () => {
-        Logger.verbose(`Listen on ${ENV.APP_PORT || process.env.PORT} 🙌 `, Main.name);
+      .listen(process.env.PORT || ENV.APP_PORT, () => {
+        Logger.verbose(`Listen on ${process.env.PORT || ENV.APP_PORT} 🙌 `, Main.name);
       })
       .catch(error => Logger.error(error));
   }
