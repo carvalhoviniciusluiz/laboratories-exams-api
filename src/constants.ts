@@ -22,6 +22,8 @@ export const POSTGRES_HOST = IS_TEST ? '0.0.0.0' : configService.get<string>('PO
 export const POSTGRES_USER = configService.get<string>('POSTGRES_USER');
 export const POSTGRES_PASSWORD = configService.get<string>('POSTGRES_PASSWORD');
 
+export const ADD_REJECT_UNAUTHORIZED = configService.get<string>('ADD_REJECT_UNAUTHORIZED') || 'false';
+
 if (IS_DEV) {
   console.table(ENV_FILE);
 }
