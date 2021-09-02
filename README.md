@@ -483,11 +483,111 @@ Resposta
 
 #### `#POST /laboratory-exams` :
 
-Parâmetros
+API para associar laboratórios e exames
+
+Shell
+
+```shell
+> POST /laboratory-exams
+```
+
+Corpo
+
+```js
+{
+  "relationship_ids": [
+    {
+      "laboratory_id": "d2bf930f-f5c3-4794-95d8-a7b9e4e59bb5",
+      "exam_id": "03036fb6-aae2-46d3-88f9-18e44a0dbcca"
+    }, {
+      "laboratory_id": "d2bf930f-f5c3-4794-95d8-a7b9e4e59bb5",
+      "exam_id":"8b5b13a9-8a47-4775-860e-101981b3037c"
+    }
+  ]
+}
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success"
+  }
+}
+```
 
 #### `#DELETE /laboratory-exams` :
 
-Parâmetros
+API para remover a associação entre laboratórios e exames
+
+Shell
+
+```shell
+> DELETE /laboratory-exams
+```
+
+Corpo
+
+```js
+{
+  "relationship_ids": [
+    {
+      "laboratory_id": "d2bf930f-f5c3-4794-95d8-a7b9e4e59bb5",
+      "exam_id": "03036fb6-aae2-46d3-88f9-18e44a0dbcca"
+    }, {
+      "laboratory_id": "d2bf930f-f5c3-4794-95d8-a7b9e4e59bb5",
+      "exam_id":"8b5b13a9-8a47-4775-860e-101981b3037c"
+    }
+  ]
+}
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success"
+  }
+}
+```
+
+## **Erros da API**
+
+Todos os erros se aplicam tanto as consultas de laboratório quando aos de exames.
+
+```js
+{
+  "statusCode": 404,
+  "body": {
+    "status": "error",
+    "errors": "The laboratory with id \"2f5c2f43-40ab-4ae5-8ce6-0d1aff57ebe3\" was not found"
+  }
+}
+```
+
+```js
+{
+  "statusCode": 404,
+  "body": {
+    "status": "error",
+    "errors": "The laboratory with name \"Santana\" was not found"
+  }
+}
+```
+
+```js
+{
+  "statusCode": 401,
+  "body": {
+    "status": "error",
+    "errors": "The laboratory with id \"2f5c2f43-40ab-4ae5-8ce6-0d1aff57ebe3\" is inactive"
+  }
+}
+```
 
 ## :memo: Licença
 
