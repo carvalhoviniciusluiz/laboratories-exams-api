@@ -20,6 +20,7 @@ const SQL_RAW = `
   FROM exams
     LEFT JOIN laboratory_exams on laboratory_exams.exam_id = exams.id
     LEFT JOIN laboratories on laboratories.id = laboratory_exams.laboratory_id
+  WHERE exams.deleted_at IS NULL
 `;
 
 @Injectable()
@@ -57,12 +58,12 @@ export class ExamsService {
     }, []);
   }
 
-  async findAll(status: number): Promise<ExamEntity[]> {
+  async findAll(status = 1): Promise<ExamEntity[]> {
     const entityManager = getManager();
     const rawData = await entityManager.query(
       SQL_RAW +
         `
-          WHERE exams.status = $1;
+          AND exams.status = $1;
         `,
       [status]
     );
@@ -71,11 +72,21 @@ export class ExamsService {
   }
 
   async findById(id: string): Promise<ExamEntity> {
+    const found = await this.repository.findOne(id);
+
+    if (!found) {
+      throw ExamNotFoundException.withId(id);
+    }
+
+    return found;
+  }
+
+  async findByIdRaw(id: string): Promise<ExamEntity> {
     const entityManager = getManager();
     const rawData = await entityManager.query(
       SQL_RAW +
         `
-          WHERE exams.id = $1;
+          AND exams.id = $1;
         `,
       [id]
     );
@@ -84,7 +95,9 @@ export class ExamsService {
       throw ExamNotFoundException.withId(id);
     }
 
-    return this.reduce(rawData);
+    const [found] = this.reduce(rawData);
+
+    return found;
   }
 
   async findByName(name: string, status = 1): Promise<ExamEntity[]> {
@@ -92,7 +105,7 @@ export class ExamsService {
     const rawData = await entityManager.query(
       SQL_RAW +
         `
-          WHERE exams.name ILIKE $1
+          AND exams.name ILIKE $1
           AND exams.status = $2;
         `,
       [`%${name}%`, status]
@@ -136,7 +149,9 @@ export class ExamsService {
 
     await found.save();
 
-    return found;
+    const res = await this.findByIdRaw(id);
+
+    return res;
   }
 
   async delete(id: string): Promise<void> {

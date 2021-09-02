@@ -21,7 +21,7 @@ export class ExamsController {
   @ApiOkResponse({ type: [ExamResponse] })
   @Get('/:id')
   async getById(@Param('id', ValidationPipe) id: string) {
-    const found = await this.service.findById(id);
+    const found = await this.service.findByIdRaw(id);
     return ExamResponse.factory(found);
   }
 
