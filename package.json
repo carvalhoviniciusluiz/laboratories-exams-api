@@ -4,8 +4,10 @@
   "description": "This is our Laboratories-Exams API",
   "author": "Carvalho, Vinicius Luiz <carvalho.viniciusluiz@gmail.com>",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
+    "prestart:prod": "yarn prebuild && yarn build",
+    "postinstall": "yarn prestart:prod",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "build:tsc": "tsc -p tsconfig.build.json",
@@ -51,7 +53,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.3.0",
     "swagger-ui-express": "^4.1.6",
-    "typeorm": "^0.2.37"
+    "typeorm": "^0.2.37",
+    "typescript": "^4.4.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.1",
@@ -79,8 +82,7 @@
     "ts-loader": "^9.2.5",
     "ts-node": "^10.2.1",
     "ts-node-dev": "^1.1.8",
-    "tsconfig-paths": "^3.11.0",
-    "typescript": "^4.4.2"
+    "tsconfig-paths": "^3.11.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -102,5 +104,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "14.0.0"
   }
 }
