@@ -129,6 +129,221 @@ __NOTA__: O projeto conta com um ambiente de produção hospedado no [Heroku](ht
 
 __IMPORTANTE__: Por padrão as apps instaladas para test stage no ambiente Heroku hibernam após certo período de tempo. Caso o testo do projeto esteja sendo realizado no ambiente Heroku pela primeira vez deve-se aguardar 30s para que o Heroku possa subir a instancia de teste.
 
+#
+
+### **Banco de Dados de Test:**
+
+__IMPORTANTE__: Você pode conectar no banco de produção configurado no ambiente do Heroku usando qualquer client de conexão de Postgres.
+
+Dados de acesso:
+
+| Param | Value
+|---------|--------------
+| POSTGRES_HOST | ec2-44-198-24-0.compute-1.amazonaws.com
+| POSTGRES_USER | jatrpozpmbmghg
+| POSTGRES_PASSWORD | 06206d144d59fd296d6df502e1e3287cea39ebc2a379841ab494121d82beb51e
+| POSTGRES_DB | db7oeketr07cjc
+
+#
+
+### **Endpoints:**
+
+Os endpoints não possuem nenhum tipo de autenticador de acesso por isso podem ser acessadas normalmente sem necessidade de informar algum hash de autorização.
+
+## Laboratórios
+
+#### `#GET /laboratories` :
+
+API que devolve uma coleção de laboratórios
+
+Parâmetros
+
+| Param | Type | Value
+|---------|--------------|----
+| name | string | Texto para consultar
+| status | number | 0 ou 1
+
+Shell
+
+```shell
+> GET /laboratories?name=Guerra&status=1
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": [
+      {
+        "id": "25670292-deaa-4c7c-8785-68c7599df84c",
+        "name": "Laboratório Paulo Guerra",
+        "address": "Rua Jovino Dinoa, 1852, centro",
+        "status": "ATIVO",
+        "exams": []
+      }
+    ]
+  }
+}
+```
+
+#### `#GET /laboratories/:id` :
+
+API que devolve um objeto específico
+
+Shell
+
+```shell
+> GET /laboratories/d2bf930f-f5c3-4794-95d8-a7b9e4e59bb5
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": {
+      "id": "d2bf930f-f5c3-4794-95d8-a7b9e4e59bb5",
+      "name": "Laboratório Frota",
+      "address": "Rua Jovino Dinoa, 1852, centro",
+      "status": "ATIVO",
+      "exams": []
+    }
+  }
+}
+```
+
+#### `#POST /laboratories` :
+
+API para cadastrar novos laboratórios
+
+Shell
+
+```shell
+> POST /laboratories
+```
+
+Corpo
+
+```js
+{
+  "name": "Laboratório São José",
+  "address": "Rua Jovino Dinoa, 1852, centro",
+  "status": 1
+}
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": {
+      "id": "9eb9570a-7186-4301-8063-c90e40c589cc",
+      "name": "Laboratório São José",
+      "address": "Rua Jovino Dinoa, 1852, centro",
+      "status": "ATIVO"
+    }
+  }
+}
+```
+
+#### `#PATCH /laboratories/:id` :
+
+API para atualizar laboratórios existentes
+
+Shell
+
+```shell
+> PATCH /laboratories
+```
+
+Corpo
+
+```js
+{
+  "name": "Laboratório São José",
+  "address": "Rua Jovino Dinoa, 1852, centro",
+  "status": 1
+}
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success",
+    "data": {
+      "id": "9eb9570a-7186-4301-8063-c90e40c589cc",
+      "name": "Laboratório São José",
+      "address": "Rua Jovino Dinoa, 1852, centro",
+      "status": "ATIVO"
+    }
+  }
+}
+```
+
+#### `#DELETE /laboratories/:id` :
+
+API para remover laboratórios
+
+Shell
+
+```shell
+> DELETE /laboratories
+```
+
+Resposta
+
+```js
+{
+  "statusCode": 201,
+  "body": {
+    "status": "success"
+  }
+}
+```
+
+## Exames
+
+#### `#GET /exams` :
+
+Parâmetros
+
+#### `#GET /exams/:id` :
+
+Parâmetros
+
+#### `#POST /exams` :
+
+Parâmetros
+
+#### `#PATCH /exams/:id` :
+
+Parâmetros
+
+#### `#DELETE /exams/:id` :
+
+Parâmetros
+
+## Associação em Lote
+
+#### `#POST /laboratory-exams` :
+
+Parâmetros
+
+#### `#DELETE /laboratory-exams` :
+
+Parâmetros
+
 ## :memo: Licença
 
 Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
