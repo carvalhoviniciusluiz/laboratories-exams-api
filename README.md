@@ -123,6 +123,12 @@ Alternativamente, você pode usar a ferramenta de test de apis [Insomnia](https:
 
 ![Sem Título](https://user-images.githubusercontent.com/22005684/131832565-54cbc51e-be23-4ac7-a370-2197afd1daff.png)
 
+__NOTA__: O projeto conta com um ambiente de produção hospedado no [Heroku](https://www.heroku.com/) acessível através [``http://laboratories-exams-api.herokuapp.com``](http://laboratories-exams-api.herokuapp.com) ou alterando o ambiente configurado no Insomnia:
+
+![Sem Título](https://user-images.githubusercontent.com/22005684/131923633-42bf5ca5-251e-4d27-9941-9958e9b064bd.png)
+
+__IMPORTANTE__: Por padrão as apps instaladas para test stage no ambiente Heroku hibernam após certo período de tempo. Caso o testo do projeto esteja sendo realizado no ambiente Heroku pela primeira vez deve-se aguardar 30s para que o Heroku possa subir a instancia de teste.
+
 ## :memo: Licença
 
 Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
