@@ -12,6 +12,16 @@ type ExamProps = {
   status?: number;
 };
 
+const SQL_RAW = `
+  SELECT exams.id as examId, exams.name as examName, exams.type as examType,
+    exams.status as examStatus, laboratories.id as laboratoryId,
+    laboratories.name as laboratoryName, laboratories.address as laboratoryAddress,
+    laboratories.status as laboratoryStatus
+  FROM exams
+    LEFT JOIN laboratory_exams on laboratory_exams.exam_id = exams.id
+    LEFT JOIN laboratories on laboratories.id = laboratory_exams.laboratory_id
+`;
+
 @Injectable()
 export class ExamsService {
   constructor(
@@ -50,16 +60,10 @@ export class ExamsService {
   async findAll(status: number): Promise<ExamEntity[]> {
     const entityManager = getManager();
     const rawData = await entityManager.query(
-      `
-        SELECT exams.id as examId, exams.name as examName, exams.type as examType,
-          exams.status as examStatus, laboratories.id as laboratoryId,
-          laboratories.name as laboratoryName, laboratories.address as laboratoryAddress,
-          laboratories.status as laboratoryStatus
-        FROM exams
-          LEFT JOIN laboratory_exams on laboratory_exams.exam_id = exams.id
-          LEFT JOIN laboratories on laboratories.id = laboratory_exams.laboratory_id
-        WHERE exams.status = $1;
-      `,
+      SQL_RAW +
+        `
+          WHERE exams.status = $1;
+        `,
       [status]
     );
 
@@ -69,21 +73,33 @@ export class ExamsService {
   async findById(id: string): Promise<ExamEntity> {
     const entityManager = getManager();
     const rawData = await entityManager.query(
-      `
-        SELECT exams.id as examId, exams.name as examName, exams.type as examType,
-          exams.status as examStatus, laboratories.id as laboratoryId,
-          laboratories.name as laboratoryName, laboratories.address as laboratoryAddress,
-          laboratories.status as laboratoryStatus
-        FROM exams
-          LEFT JOIN laboratory_exams on laboratory_exams.exam_id = exams.id
-          LEFT JOIN laboratories on laboratories.id = laboratory_exams.laboratory_id
-        WHERE exams.id = $1;
-      `,
+      SQL_RAW +
+        `
+          WHERE exams.id = $1;
+        `,
       [id]
     );
 
     if (!rawData) {
       throw ExamNotFoundException.withId(id);
+    }
+
+    return this.reduce(rawData);
+  }
+
+  async findByName(name: string, status = 1): Promise<ExamEntity[]> {
+    const entityManager = getManager();
+    const rawData = await entityManager.query(
+      SQL_RAW +
+        `
+          WHERE exams.name ILIKE $1
+          AND exams.status = $2;
+        `,
+      [`%${name}%`, status]
+    );
+
+    if (!rawData) {
+      throw ExamNotFoundException.withName(name);
     }
 
     return this.reduce(rawData);
@@ -102,27 +118,6 @@ export class ExamsService {
     }
 
     return found;
-  }
-
-  // async findAllByIdOnlyActive(ids: string): Promise<ExamEntity[]> {
-  //   return this.repository
-  //     .createQueryBuilder()
-  //     .where('id IN (:...ids) AND status = 1', {
-  //       ids
-  //     })
-  //     .getMany();
-  // }
-
-  async findByName(name: string, status: number): Promise<ExamEntity[]> {
-    const statusVal = !!status ? status : 1;
-
-    return this.repository
-      .createQueryBuilder('exams')
-      .where(`name ILIKE :name`, {
-        name: `%${name}%`
-      })
-      .andWhere({ status: statusVal })
-      .getMany();
   }
 
   async create(exam: ExamProps): Promise<ExamEntity> {
