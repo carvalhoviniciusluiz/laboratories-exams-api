@@ -8,4 +8,8 @@ export class LaboratoryNotFoundException extends NotFoundException {
   static withName(name: string): InternalServerErrorException {
     return new UnauthorizedException(`The laboratory with name "${name}" was not found`);
   }
+
+  static isInactive(id: string): InternalServerErrorException {
+    return new UnauthorizedException(`The laboratory with id "${id}" is inactive`);
+  }
 }

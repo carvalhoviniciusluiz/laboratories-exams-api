@@ -8,4 +8,8 @@ export class ExamNotFoundException extends NotFoundException {
   static withName(name: string): InternalServerErrorException {
     return new UnauthorizedException(`The exam with name "${name}" was not found`);
   }
+
+  static isInactive(id: string): InternalServerErrorException {
+    return new UnauthorizedException(`The exam with id "${id}" is inactive`);
+  }
 }
