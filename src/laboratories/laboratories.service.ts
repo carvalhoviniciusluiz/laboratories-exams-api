@@ -30,12 +30,6 @@ export class LaboratoriesService {
   async findById(id: string): Promise<LaboratoryEntity> {
     const found = await this.repository.findOne(id);
 
-    // const found = await this.repository
-    //   .createQueryBuilder('laboratory')
-    //   .leftJoinAndSelect('laboratory.exams', 'exam')
-    //   .where('laboratory.id = :id', { id })
-    //   .getOne();
-
     if (!found) {
       throw LaboratoryNotFoundException.withId(id);
     }
