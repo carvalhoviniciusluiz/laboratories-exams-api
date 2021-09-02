@@ -11,7 +11,7 @@ export const MAJOR = configService.get<string>('MAJOR') || 'dev';
 export const VERSION = configService.get<string>('VERSION') || '1';
 
 export const NODE_ENV = configService.get<string>('NODE_ENV') || 'production';
-export const APP_PORT = configService.get<number>('APP_PORT') || 3333;
+export const APP_PORT = configService.get<number>('APP_PORT');
 export const APP_HOST = configService.get<string>('APP_HOST') || '0.0.0.0';
 
 export const IS_PROD = NODE_ENV === 'production';
